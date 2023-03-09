@@ -1,0 +1,77 @@
+import {Router, Request, Response, NextFunction} from 'express';
+import { StatusCodes } from 'http-status-codes';
+import Controller from '@/utils/interfaces/controller.interface';
+import HttpException from '@/utils/exceptions/httpException';
+import validateResource from '@/middlewares/validation.middleware';
+import isAdmin from '@/middlewares/isAdmin.middleware';
+import log from '@/utils/logger';
+import {createPurchaseSchema, getDailyPurchasesSchema, getSinglePurchaseSchema} from '@/resources/purchase/purchase.validation';
+import {CreatePurchaseInterface, GetDailyPurchasesInterface, GetSinglePurchaseInterface} from '@/resources/purchase/purchase.interface';
+import PurchaseService from '@/resources/purchase/purchase.service';
+
+
+class PurchaseController implements Controller {
+    public path ='/purchases';
+    public router = Router();
+    private PurchaseService = new PurchaseService()
+
+    constructor(){
+        this.initialiseRoutes();
+    }
+
+    private initialiseRoutes(): void {
+        this.router.post(
+            `${this.path}`,
+            [isAdmin, validateResource(createPurchaseSchema)],
+            this.createPurchase
+        )
+
+        this.router.get(
+            `${this.path}`,
+            [isAdmin, validateResource(getDailyPurchasesSchema)],
+            this.getDailyPurchases
+        )
+        
+        this.router.get(
+            `${this.path}/:purchaseId`,
+            [isAdmin, validateResource(getSinglePurchaseSchema)],
+            this.getSinglePurchase
+        )
+    }
+
+    private createPurchase = async (req: Request<{}, {}, CreatePurchaseInterface['body']>, res: Response, next: NextFunction): Promise<Response | void> => {
+        const purchaseBody = req.body;
+
+        try {
+            const purchase = await this.PurchaseService.createPurchase(purchaseBody);
+            res.status(StatusCodes.CREATED).json(purchase);
+        } catch (e: any) {
+            log.error(e.message);
+            next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
+        }
+    }
+
+    private getDailyPurchases = async (req: Request<{}, {}, {}, GetDailyPurchasesInterface>, res: Response, next: NextFunction): Promise<Response | void> => {
+        const queryInput = req.query;
+        try {
+            const purchases = await this.PurchaseService.getDailyPurchases(queryInput);
+            res.status(StatusCodes.OK).json(purchases);
+        } catch (e: any) {
+            log.error(e.message);
+            next(new HttpException(StatusCodes.INTERNAL_SERVER_ERROR, e.message))
+        }
+    }
+
+    private getSinglePurchase = async (req: Request<GetSinglePurchaseInterface>, res: Response, next: NextFunction): Promise<Response | void> => {
+        const {purchaseId} = req.params;
+        try {
+            const purchase = await this.PurchaseService.getSinglePurchase(purchaseId);
+            res.status(StatusCodes.OK).json(purchase);
+        } catch (e: any) {
+            log.error(e.message);
+            next(new HttpException(StatusCodes.INTERNAL_SERVER_ERROR, e.message));
+        }
+    }
+}
+
+export default PurchaseController;

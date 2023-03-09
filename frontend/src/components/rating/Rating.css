@@ -1,0 +1,20 @@
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.rating-title {
+    font-size: 20px;
+}
+
+.rating-icons-container {
+    display: flex;
+}
+
+.rating-icons {
+    font-size: 18px !important;
+    color: #555;
+    margin-right: 5px;
+    cursor: pointer;
+}
