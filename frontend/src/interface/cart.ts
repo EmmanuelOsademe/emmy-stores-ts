@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
+
 export interface ICart {
-    id: string;
+    productId: mongoose.Types.ObjectId;
     quantity: number;
 }

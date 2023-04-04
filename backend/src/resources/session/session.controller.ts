@@ -53,8 +53,8 @@ class SessionController implements Controller {
     private refreshSession = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
         const refreshToken = get(req, "headers.x-refresh") as string;
         try {
-            const token = await this.SessionService.refreshSession(refreshToken);
-            res.status(StatusCodes.OK).json({accessToken: token});
+            const data = await this.SessionService.refreshSession(refreshToken);
+            res.status(StatusCodes.OK).json({data: data});
         } catch (e: any) {
             log.error(e.message);
             next(new HttpException(StatusCodes.BAD_REQUEST, e.message));

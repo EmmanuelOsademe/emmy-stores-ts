@@ -86,8 +86,10 @@ class UserController implements Controller {
 
         try {
             const message = await this.UserService.register(userInput);
-            res.status(StatusCodes.CREATED).send(message);
+            console.log(message);
+            res.status(StatusCodes.CREATED).json({msg: message});
         } catch (e: any) {
+            console.log(e);
             log.error(e.message);
             if(e.code === 11000){
                 next(new HttpException(StatusCodes.CONFLICT, e.message));

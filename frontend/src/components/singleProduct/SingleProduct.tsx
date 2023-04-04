@@ -3,13 +3,15 @@ import "./SingleProduct.css";
 import { Rating } from '../rating/Rating';
 import {Product} from "../../../../backend/src/resources/product/product.model";
 import { Context } from '../../context/Context';
+import {StarOutline, Star} from '@mui/icons-material';
 
 interface Props {
     prod: Product;
 }
 
 export const SingleProduct: React.FC<Props> = ({prod}) => {
-    const {cartState: {cart}, cartDispatch} = useContext(Context);
+    const {cartState: {cart}, cartDispatch, productFilterState: {byRating}} = useContext(Context);
+    
     return (
         <div className='product'>
             <img src={prod.image} alt={prod.name} className="product_img"/>
@@ -18,11 +20,21 @@ export const SingleProduct: React.FC<Props> = ({prod}) => {
                 <div className='product_price'>${prod.price/100}</div>
             </div>
             <div className='product_details_bottom'>
-                <Rating ProductRating={prod.averageRating}/>
+                <div className="rating-icons-container">
+                {
+                    [...Array(5)].map((_, index) => {
+                        return (
+                            <span key={index}>
+                                {prod.averageRating > index ? <Star className="rating-icons" /> : <StarOutline className="rating-icons" />}
+                            </span>
+                        )
+                    })
+                }
+            </div>
                 {prod.freeShipping && <div className='product_freeShipping'>Shipping is free</div>}
             </div>
             {
-                cart.some(cartProd => cartProd.id === prod._id) ? 
+                cart.some(cartProd => cartProd.productId === prod._id) ? 
                     (
                         <button 
                             className='removeFromCartBtn' 
@@ -37,7 +49,7 @@ export const SingleProduct: React.FC<Props> = ({prod}) => {
                             onClick={() => cartDispatch({type: "ADD_TO_CART", payload: prod})}
                             disabled={prod.currentStock === 0}
                         >
-                            {prod.currentStock == 0 ? "Out of Stock": "Add to Cart"}
+                            {prod.currentStock === 0 ? "Out of Stock": "Add to Cart"}
                         </button>
                     )
             }

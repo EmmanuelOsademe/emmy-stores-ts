@@ -1,9 +1,14 @@
-import {number, object, string, array} from 'zod';
+import {number, object, string, array, nativeEnum} from 'zod';
 
 const orderProductId = object({
     productId: string(),
-    quantity: number(),
-    shippingFee: number()
+    quantity: number()
+})
+
+const deliveryAddress = object({
+    houseAddress: string().optional(),
+    city: string(),
+    country: string()
 })
 
 export const createOrderSchema = object({
@@ -11,7 +16,18 @@ export const createOrderSchema = object({
         tax: number({
             required_error: "Tax is required"
         }),
-        orderedItems: array(orderProductId)
+        cart: array(orderProductId),
+        shippingFee: number({
+            required_error: "Shipping Fee is required"
+        }),
+        subTotal: number({
+            required_error: "Subtotal cost is required"
+        }),
+        totalCost: number({
+            required_error: "Total cost is required"
+        }),
+        deliveryOption: string(),
+        deliveryAddress: deliveryAddress
     })
 })
 

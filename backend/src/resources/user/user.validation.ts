@@ -1,5 +1,11 @@
 import {object, string} from 'zod';
 
+const userAddressSchema = object({
+    houseAddress: string(),
+    city: string(),
+    country: string()
+})
+
 export const createUserSchema = object({
     body: object({
         firstName: string({
@@ -14,6 +20,7 @@ export const createUserSchema = object({
         phone: string({
             required_error: "Phone number is required"
         }),
+        address: userAddressSchema,
         password: string({
             required_error: "Password is required"
         }).min(8, "Password must be a minimum of 8 characters"),

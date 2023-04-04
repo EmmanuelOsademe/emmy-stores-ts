@@ -1,5 +1,4 @@
 import multer from 'multer';
-import cloudinary from 'cloudinary';
 import path from 'path';
 import {Request} from 'express';
 
@@ -14,7 +13,6 @@ const upload = multer(
             }
 
             req.body.image = file.originalname;
-            console.log(req.body.image)
             cb(null, true)
         }
     }

@@ -1,0 +1,100 @@
+.register {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.regHeader {
+    color: rgb(151, 150, 150);
+}
+
+.regForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formInputs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.newUserItem {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 20px;
+    align-items: center;
+}
+
+.newUserItem>label {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    width: inherit;
+    color: rgb(151, 150, 150);
+    display: flex;
+    justify-content: start;
+}
+
+.newUserItem>input {
+    height: 20px;
+    padding: 10px;
+    width: inherit;
+    border: 1px solid grey;
+    border-radius: 50px;
+    font-size: 16px;
+}
+
+.regBtn {
+    margin-top: 25px;
+    height: 45px;
+    width: 500px;
+    color: white;
+    background-color: cadetblue;
+    border: solid 1.5px white;
+    border-radius: 25px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.loginRoute {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(151, 150, 150)
+}
+
+.loginLink {
+    text-decoration: none;
+    color: cadetblue;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.alert {
+    padding: 0.375rem 0.75rem;
+    margin: 0 auto;
+    font-size: 24px;
+    border-color: transparent;
+    border-radius: var(--borderRadius);
+    width: var(--fluid-width);
+    max-width: var(--fixed-width);
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.alert-danger {
+    color: crimson;
+    background: var(--red-light);
+}
+
+.alert-success {
+    color: darkcyan;
+    background: var(--green-light);
+}

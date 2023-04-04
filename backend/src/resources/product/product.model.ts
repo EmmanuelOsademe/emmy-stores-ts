@@ -1,5 +1,6 @@
 import {getModelForClass, modelOptions, prop, Ref, pre, DocumentType} from "@typegoose/typegoose";
 import ReviewModel, {Review} from '@/resources/review/review.model';
+import mongoose from "mongoose";
 
 export const privateFields = [
     "cloudinaryID", "__v"
@@ -20,8 +21,7 @@ export const privateFields = [
 })
 
 export class Product {
-    @prop()
-    _id?: string
+    _id: mongoose.Types.ObjectId
 
     @prop({required: true, unique: true})
     name: string
@@ -32,8 +32,14 @@ export class Product {
     @prop({required: true})
     price: number
 
+    @prop({default: 0})
+    discountRate: 0
+
     @prop({required: true, default: 0})
     currentStock: number
+
+    @prop({required: true})
+    triggerQuantity: number
 
     @prop({required: true, enum: ['general', 'electronics', 'fashion', 'home & office', 'computing', 'kitchen'], default: "general"})
     category: string

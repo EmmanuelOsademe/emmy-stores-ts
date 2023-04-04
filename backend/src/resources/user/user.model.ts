@@ -16,15 +16,28 @@ export const privateFields = [
     email: 1
 })
 
-@pre<User>("save", async function(){
+/*@pre<User>("save", async function(){
     if(!this.isModified('password')){
         return 
     }
+    console.log(this.password);
 
     const hash = await argon2.hash(this.password);
+    console.log(hash);
     this.password = hash;
     return;
-})
+})*/
+
+export class UserAddress {
+    @prop({required: true})
+    houseAddress: string
+
+    @prop({required: true})
+    city: string
+
+    @prop({required: true})
+    country: string
+}
 
 export class User {
     @prop({required: true})
@@ -39,16 +52,19 @@ export class User {
     @prop({required: true})
     phone: string
 
+    @prop()
+    address: UserAddress
+
     @prop({required: true})
     password: string
 
-    @prop({required: true, enum: ['admin', 'user', 'super user'], default: 'user'})
+    @prop({required: true, enum: ['admin', 'user', 'superUser'], default: 'user'})
     role: string
 
     @prop({required: true, default: () => nanoid()})
     verificationCode: string
 
-    @prop()
+    @prop({allowMixed: Severity.ALLOW})
     passwordResetCode: string | null
 
     @prop({required: true, default: false})

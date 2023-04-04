@@ -1,6 +1,11 @@
 import {prop, Ref, getModelForClass} from '@typegoose/typegoose';
 import {Product} from '@/resources/product/product.model';
 import {User} from '@/resources/user/user.model';
+import mongoose from 'mongoose';
+
+export const privateFields = [
+     "__v", "clientSecret", "paymentIntent", "tax", "shippingFee"
+]
 
 export class singleOrder {
     @prop({ref: () => Product})
@@ -24,7 +29,20 @@ export class singleOrder {
     quantity: number
 }
 
+export class deliveryAddress {
+    @prop()
+    houseAddress: string
+
+    @prop({required: true})
+    city: string
+
+    @prop({required: true})
+    country: string
+}
+
 export class Order {
+    _id: mongoose.Types.ObjectId
+
     @prop({required: true})
     tax: number
 
@@ -39,6 +57,12 @@ export class Order {
 
     @prop({type: singleOrder, required: true})
     orderItems: Array<singleOrder>
+
+    @prop({required: true, enum: ['pickup', 'home-delivery']})
+    deliveryOption: string
+
+    @prop({required: true})
+    deliveryAddress: deliveryAddress
 
     @prop({required: true, enum: ['pending', 'paid', 'failed', 'deliverd'], default: 'pending'})
     status: string

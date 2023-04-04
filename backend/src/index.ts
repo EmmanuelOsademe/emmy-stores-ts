@@ -8,6 +8,7 @@ import ProductController from '@/resources/product/product.controller';
 import OrderController from '@/resources/order/order.controller';
 import ReviewController from '@/resources/review/review.controller';
 import PurchaseController from '@/resources/purchase/purchase.controller';
+import AdminController from '@/resources/admin/admin.controller';
 
 validateEnv();
 
@@ -18,7 +19,8 @@ const app = new App(
         new ProductController(), 
         new OrderController(), 
         new ReviewController(),
-        new PurchaseController()
+        new PurchaseController(),
+        new AdminController()
     ], 
     Number(process.env.PORT)
 );

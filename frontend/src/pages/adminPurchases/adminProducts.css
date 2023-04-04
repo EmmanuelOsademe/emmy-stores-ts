@@ -1,0 +1,14 @@
+.adminProducts {
+    display: flex;
+    gap: 10px;
+}
+
+.adminProducts-sidebar {
+    width: 20%;
+}
+
+.adminProducts-main {
+    width: 78%;
+    padding: 10px;
+    margin-right: 10px;
+}

@@ -67,6 +67,7 @@ class OrderController implements Controller {
     private createOrder = async (req: Request<{}, {}, CreateOrderInterface>, res: Response, next: NextFunction): Promise<Response | void> => {
         const orderInput = req.body;
         const {_id: userId} = res.locals.user;
+        //console.log(orderInput);
 
         try {
             const order = await this.OrderService.createOrder(orderInput, userId);
@@ -78,7 +79,7 @@ class OrderController implements Controller {
     }
 
     private getStripeKey = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> =>{
-        res.status(StatusCodes.OK).send(process.env.STRIPE_PUBLIC_KEY);
+        res.status(StatusCodes.OK).json({publicKey: process.env.STRIPE_PUBLIC_KEY as string});
     }
 
     private getUserOrders = async (req: Request<GetUserOrderInterface>, res: Response, next: NextFunction): Promise<Response | void> => {

@@ -38,7 +38,7 @@ class SessionService {
             // Sign refresh Token 
             const refreshToken = createRefreshToken(session._id)
 
-            return {accessToken, refreshToken};
+            return {user, accessToken, refreshToken};
         } catch (e: any) {
             throw new Error(e.message);
         }

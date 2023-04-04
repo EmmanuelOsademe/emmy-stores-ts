@@ -1,9 +1,10 @@
-import UserModel, { privateFields } from '@/resources/user/user.model';
+import UserModel, { privateFields, User } from '@/resources/user/user.model';
 import {nanoid} from 'nanoid';
 import sendEmail from '@/utils/mailer';
 import {CreateUserInterface, DeleteUserInterface, ForgotPasswordInterface, ResetPasswordInterface, UpdateUserDetailsInterface, UpdateUserPasswordInterface, VerifyUserInterface} from '@/resources/user/user.interface';
 import log from '@/utils/logger';
 import { omit, update } from 'lodash';
+import argon2 from 'argon2';
 
 
 class UserService {
@@ -14,8 +15,10 @@ class UserService {
 
             const role = (await this.user.countDocuments({})) === 0 ? 'admin' : 'user';
 
-            const user = await this.user.create({...userInput, role});
+            const hashedPassword = await argon2.hash(userInput.password);
 
+            const user = await this.user.create({...userInput, role: role, password: hashedPassword});
+            console.log(user);
             const emailVerificationLink = `${process.env.ORIGIN}/api/v1/users/verify?verificationCode=${user.verificationCode}&userId=${user._id}`;
             const message = `<p>Dear ${user.firstName}, <br><br>Please confirm your email by clicking on the following link:
                 <a href="${emailVerificationLink}">Verify Email</a></p>`;
@@ -30,6 +33,7 @@ class UserService {
             log.info(emailVerificationLink);
             return `User successfully created. Check your email to verify your account`;
         } catch (e: any) {
+            console.log(e);
             if(e.code === 11000){
                 throw new Error("Account already exists");
             }else{

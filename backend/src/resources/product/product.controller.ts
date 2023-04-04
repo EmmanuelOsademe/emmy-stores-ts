@@ -9,6 +9,8 @@ import {CreateProductInterface, DeleteSingleProductInterface, GetAllProductsInte
 import ProductService from '@/resources/product/product.service';
 import log from '@/utils/logger';
 import upload from '@/utils/imageUpload';
+import { uploadProducts } from '@/utils/imports/products-import';
+import convertCsvToJson from '@/middlewares/convertCsvToJson';
 
 class ProductController implements Controller {
     public path = '/products';
@@ -22,7 +24,7 @@ class ProductController implements Controller {
     private initialiseRoutes(): void {
         this.router.post(
             `${this.path}/createProduct`,
-            [isAdmin, validateResource(createProductSchema)],
+            [isAdmin, /*uploadProducts.single('products'), convertCsvToJson, */validateResource(createProductSchema)],
             this.createProduct
         )
 

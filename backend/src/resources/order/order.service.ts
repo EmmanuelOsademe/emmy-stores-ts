@@ -1,8 +1,10 @@
 import OrderModel from '@/resources/order/order.model';
 import {CreateOrderInterface, singleOrderInterface} from '@/resources/order/order.interface';
-import ProductModel from '@/resources/product/product.model';
+import ProductModel, { privateFields } from '@/resources/product/product.model';
 import UserModel from '@/resources/user/user.model';
 import Stripe from 'stripe';
+import mongoose from 'mongoose';
+import { omit } from 'lodash';
 
 const stripe = new Stripe(String(process.env.STRIPE_SECRET_KEY), {
     apiVersion: "2022-11-15"
@@ -14,64 +16,74 @@ class OrderService {
     private UserModel = UserModel;
 
     public async createOrder(orderInput: CreateOrderInterface, userId: string): Promise<object | Error> {
-        let {orderedItems, tax} = orderInput;
+        let {cart, tax, shippingFee, subTotal, totalCost, deliveryAddress, deliveryOption} = orderInput;
 
-        try {
-            let orderItems: singleOrderInterface[] = new Array();
-            let subtotal: number = 0;
-            let shippingFee: number = 0;
+        if(cart.length > 0){
+            try {
             
-
-            for(let item of orderedItems){
-                const productId = item.productId;
-                const dbProduct = await this.ProductModel.findById({_id: productId});
-                if(!dbProduct){
-                    throw  new Error("Product not found");
-                };
-                if(dbProduct.currentStock < item.quantity){
-                    throw new Error(`${dbProduct.name} is currently out of stock`)
+                let orderItems: singleOrderInterface[] = new Array();
+                let calculatedSubtotal: number = 0;
+    
+                for(let item of cart){
+                    const dbProduct = await this.ProductModel.findOne({_id: item.productId});
+                    
+                    if(!dbProduct){
+                        throw  new Error("Product not found");
+                    };
+                    if(dbProduct.currentStock < item.quantity){
+                        throw new Error(`${dbProduct.name} is currently out of stock`)
+                    }
+                    const {name, image, price, _id} = dbProduct;
+                    const singleOrderItem = {
+                        quantity: item.quantity,
+                        productName: name,
+                        price,
+                        image,
+                        product: _id,
+                    }
+    
+                    orderItems = [...orderItems, singleOrderItem]
+                    calculatedSubtotal += item.quantity * price;
+                    dbProduct.currentStock = dbProduct.currentStock - item.quantity;
+                    await dbProduct.save();
                 }
-                const {name, image, price, _id} = dbProduct;
-                const singleOrderItem = {
-                    quantity: item.quantity,
-                    productName: name,
-                    price,
-                    image,
-                    product: _id,
+    
+                if(calculatedSubtotal !== subTotal){
+                    throw new Error('Error computing subtotal cost');
                 }
-
-                if(!dbProduct.freeShipping){
-                    shippingFee += item.shippingFee;
+    
+                const calculatedTotal = calculatedSubtotal + tax + shippingFee;
+                if(calculatedTotal !== totalCost){
+                    throw new Error('Error computing total cost');
                 }
-
-                orderItems = [...orderItems, singleOrderItem]
-                subtotal += item.quantity * price;
-                dbProduct.currentStock = dbProduct.currentStock - item.quantity;
-                await dbProduct.save();
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: Math.round(calculatedTotal),
+                    currency: 'usd',
+                    automatic_payment_methods: {
+                        enabled: true
+                    }
+                })
+    
+                const order = await this.order.create({
+                    orderItems,
+                    total: calculatedTotal/100, 
+                    subtotal: calculatedSubtotal/100,
+                    tax: tax/100,
+                    shippingFee: shippingFee/100,
+                    deliveryOption: deliveryOption,
+                    deliveryAddress: deliveryAddress, 
+                    clientSecret: paymentIntent.client_secret,
+                    user: userId
+                })
+    
+                return order;
+            } catch (e: any) {
+                console.log(e)
+                throw new Error(e.message);
             }
-
-            const total = subtotal + tax + shippingFee;
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: Math.round(total),
-                currency: 'usd',
-                automatic_payment_methods: {
-                    enabled: true
-                }
-            })
-
-            const order = await this.order.create({
-                orderItems,
-                total: total/100, 
-                subtotal: subtotal/100,
-                tax: tax/100,
-                shippingFee: shippingFee/100,
-                clientSecret: paymentIntent.client_secret,
-                user: userId
-            })
-
-            return order;
-        } catch (e: any) {
-            throw new Error(e.message);
+        }else{
+            console.log("No product in cart");
+            throw new Error("No product in cart");
         }
     }
 
@@ -96,7 +108,8 @@ class OrderService {
     public async getAllOrders(): Promise<object | Error>{
         try {
             const orders = await this.order.find({})
-            return orders
+
+            return orders.map(order => omit(order.toJSON(), privateFields))
         } catch (e: any) {
             throw new Error(e.message);
         }

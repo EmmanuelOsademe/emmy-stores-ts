@@ -1,0 +1,14 @@
+.adminSales {
+    display: flex;
+    gap: 10px;
+}
+
+.adminSales-sidebar {
+    width: 20%;
+}
+
+.adminSales-main {
+    width: 78%;
+    padding: 10px;
+    margin-right: 10px;
+}

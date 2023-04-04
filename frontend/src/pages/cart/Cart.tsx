@@ -5,25 +5,57 @@ import { Context } from "../../context/Context";
 import { CartItem } from "../../components/cartItem/CartItem";
 import { Product } from "../../../../backend/src/resources/product/product.model";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { IAddress } from "../../interface/address";
+
 
 export const Cart: React.FC = () => {
-    const {cartState: {cart}, products} = useContext(Context);
-    const [total, setTotal] = useState<number>(0);
-    const [deliveryOption, setDeliveryOption] = useState<string>('home-delivery');
-    console.log(deliveryOption);
     const navigate = useNavigate();
 
+    const {cartState: {cart}, products, user, deliveryOption, setDeliveryOption, deliveryAddress,
+    setDeliveryAddress, shippingFee, setShippingFee, tax, setTax, totalCost, setTotalCost, subTotal, setSubTotal} = useContext(Context);
+    
     useEffect(() => {
-        setTotal(cart.reduce((acc, curr) => acc + ((products.find(prod => prod._id === curr.id) as Product)?.price * curr.quantity), 0))
+        setSubTotal(cart.reduce((acc, curr) => acc + ((products.find(prod => prod._id === curr.productId) as Product)?.price * curr.quantity), 0))
     }, [cart])
+
+    useEffect(() => {
+        if(deliveryOption === "home-delivery"){
+            const newShippingFee = 1000 + Math.floor(Math.random() * 1000)
+            setShippingFee(newShippingFee);
+        }else{
+            const newShippingFee = Math.floor(Math.random() * 1000);
+            setShippingFee(newShippingFee);
+        }
+    }, [deliveryOption])
+
+    useEffect(() => {
+        if(deliveryOption === "home-delivery"){
+            setTotalCost(subTotal + shippingFee);
+        }else{
+            setTotalCost(subTotal + shippingFee)
+        }
+    }, [subTotal, shippingFee])
+
     
     const cartElements = cart.map(item => {
-        return <CartItem key={item.id} cartItem={item} />
+        return <CartItem key={item.productId} cartItem={item} />
     })
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.currentTarget;
+
+        setDeliveryAddress(prevDetails => ({
+            ...prevDetails,
+            [name]: value
+        }))
+    }
+
+    
     
     const isRadioSelected = (value: string): boolean => deliveryOption === value;
 
-    const handleDeliverySelection = (e: React.ChangeEvent<HTMLInputElement>): void => setDeliveryOption(e.currentTarget.value);
+    const handleDeliverySelection = (e: React.ChangeEvent<HTMLInputElement>): void => setDeliveryOption(e.currentTarget.value as "pickup" | "home-delivery");
+
     return (
         <div className="cart">
             <div className="cartItems">{cartElements}</div>
@@ -31,7 +63,9 @@ export const Cart: React.FC = () => {
                 <div className="cart_summary-title">Cart Summary</div>
                 <div className="cart_summary_details">
                     <div className="cart_summary_count">Cart items count: {cart.length}</div>
-                    <div>Subtotal: {formatCurrency(total/100)}</div>
+                    <div>Subtotal: {formatCurrency(subTotal/100)}</div>
+                    <div>Shipping Fee: {formatCurrency(shippingFee / 100)}</div>
+                    <div>Total Cost: {formatCurrency(totalCost/100)}</div>
                 </div>
                 <div className="delivery">
                     <div className="delivery-option">
@@ -55,12 +89,47 @@ export const Cart: React.FC = () => {
                         <label>Pickup from Store</label>
                     </div>
                 </div>
-                {deliveryOption === 'pickup' ? (
-                    <button className="deliveryBtn">Select pickup options</button>
+                {deliveryOption === 'home-delivery' ? (
+                    <>
+                        <button className="deliveryBtn">Confirm your address</button>
+                        <form>
+                            <div className="newUserItem">
+                                <label>Address: </label>
+                                <input type="text" name="houseAddress" value={deliveryAddress.houseAddress} onChange={handleChange}/>
+                            </div>
+                            <div className="newUserItem">
+                                <label>City: </label>
+                                <input type="text" name="city" value={deliveryAddress.city} onChange={handleChange} required/>
+                            </div>
+                            <div className="newUserItem">
+                                <label>Country: </label>
+                                <input type="text" name="country" value={deliveryAddress.country} onChange={handleChange} required/>
+                            </div>
+                        </form>
+                    </>
                 ): (
-                    <button className="deliveryBtn">Enter your address</button>
+                    <>
+                        <button className="deliveryBtn">Confirm your city</button>
+                        <form>
+                            <div className="newUserItem">
+                                <label>City: </label>
+                                <input type="text" name="city" value={deliveryAddress.city} onChange={handleChange} required/>
+                            </div>
+                            <div className="newUserItem">
+                                <label>Country: </label>
+                                <input type="text" name="country" value={deliveryAddress.country} onChange={handleChange} required/>
+                            </div>
+                        </form>
+                    </>
+                    
                 )}
-                <button className="checkoutBtn" onClick={() => navigate("/order")}>Proceed to Checkout</button>
+            
+                {!user ? (
+                    <button className="checkoutBtn" onClick={() => navigate("/login")}>Login to Continue</button>
+                ) : (
+                    <button className="checkoutBtn" onClick={() => navigate("/payment")}>Proceed To Payment</button>
+                )}
+                
             </div>
         </div>
     )

@@ -93,3 +93,11 @@
     top: 0;
     transform: translate(80%, 10%);
 }
+
+.user_greeting {
+    color: grey;
+    position: absolute;
+    font-size: 16px;
+    top: 0;
+    transform: translate(0%, 0%);
+}

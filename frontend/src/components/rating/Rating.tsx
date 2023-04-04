@@ -1,22 +1,26 @@
 import "./Rating.css";
-import React, {useState} from 'react';
+import React, {CSSProperties, useState} from 'react';
 import {StarOutline, Star} from '@mui/icons-material';
 
 interface Props {
-    ProductRating: number;
+    rating: number;
+    onClick: (index: number) => void;
+    style?: CSSProperties
 }
 
-export const Rating: React.FC<Props> = ({ProductRating}) => {
-    const [rating, setRating] = useState<Number>(ProductRating | 3)
+export const Rating: React.FC<Props> = ({rating, onClick, style}) => {
     return (
         <div className="rating">
-            {/*<span className="rating-title">Rating</span>*/}
             <div className="rating-icons-container">
                 {
                     [...Array(5)].map((_, index) => {
                         return (
-                            <span key={index} >
-                                {rating > index ? <Star className="rating-icons"/> : <StarOutline className="rating-icons" />}
+                            <span 
+                                key={index} 
+                                onClick={() => onClick(index)}
+                                style={style}
+                            >
+                                {rating > index ? <Star className="rating-icons" /> : <StarOutline className="rating-icons" />}
                             </span>
                         )
                     })
