@@ -1,5 +1,6 @@
 import nodemailer, {SendMailOptions} from 'nodemailer';
 import log from '@/utils/logger';
+import hbs, {NodemailerExpressHandlebarsOptions} from 'nodemailer-express-handlebars'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -14,6 +15,11 @@ const transporter = nodemailer.createTransport({
         rejectUnauthorized: true
     }
 });
+
+/*transporter.use('compile', hbs({
+    viewEngine: 'express-handlebars',
+    viewPath: './views/'
+}))*/
 
 export default async function sendEmail(payload: SendMailOptions){
     transporter.sendMail(payload, (err, info) => {

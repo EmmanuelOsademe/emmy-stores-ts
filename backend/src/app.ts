@@ -8,10 +8,12 @@ import Controller from '@/utils/interfaces/controller.interface';
 import rateLimiter from '@/utils/maximumRequest';
 import errorMiddleware from '@/middlewares/error.middleware';
 import deserialiseUser from '@/middlewares/deserialiseUser.middleware';
+import AdminCronJobs from './utils/cronJobs/adminCronJobs';
 
 class App {
     public express: Application;
     public port: number;
+    private AdminCronJobs = new AdminCronJobs();
 
     constructor(controllers: Controller[], port: number){
         this.express = express();
@@ -20,6 +22,7 @@ class App {
         this.initialiseDatabaseConnection();
         this.initialiseMiddlewares();
         this.initialiseControllers(controllers);
+        this.initialiseCronJobs();
         this.initialiseErrorHandler();
     }
 
@@ -49,6 +52,10 @@ class App {
         controllers.forEach((controller: Controller) =>{
             this.express.use('/api/v1', controller.router)
         })
+    }
+
+    private initialiseCronJobs(): void{
+        this.AdminCronJobs;
     }
 
     private initialiseErrorHandler(): void {
