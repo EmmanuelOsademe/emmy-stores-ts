@@ -4,27 +4,56 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title style={{width: "150px"}}>Document</title>
+        <title>Document</title>
+        <style>
+            * {
+                font-family: 'Happy Monkey', cursive;
+                font-family: 'Source Sans Pro', sans-serif;
+            }
+
+            div {
+                font-size: 16px;
+            }
+
+            table {
+                width: 80%;
+                margin: 0 auto 0 auto;
+            }
+
+            table, th, td {
+                border: 1px solid grey;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                padding: 2px 4px;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        <h4>Dear {{name}}</h4>
-        <table>
-            <th >
-                <tr>
-                    {{#each uniqueKeys}}
-                        <th>{{this}}</th>
-                    {{/each}}
-                </tr>
-            </th>
-            <tbody>
-                {{#each data}}
+        <div>
+            <h4>Dear {{name}},</h4>
+            <h4>The following products are low on stock and might require restocking.</h4>
+            <table>
+                <caption style="font-size: 20; font-weight: 700">Out of Stock Products</caption>
+                <thead>
                     <tr>
-                        {{#each ../uniqueKeys}}
-                            <td>{{lookup .. this}}</td>
+                        {{#each lowOnStockProducts.[0]}}
+                            <th>{{@key}}</th>
                         {{/each}}
                     </tr>
-                {{/each}}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {{#each lowOnStockProducts}}
+                        <tr>
+                            {{#each this}}
+                                <td>{{this}}</td>
+                            {{/each}}
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </body>
 </html>
