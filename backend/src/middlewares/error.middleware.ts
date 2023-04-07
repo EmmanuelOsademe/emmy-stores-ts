@@ -11,6 +11,7 @@ export default function errorMiddleware(
     const status = error.status || 500;
     const message = error.message || "Something went wrong";
     //console.log(error);
+    
 
     res.status(status).json({status, message})
 }

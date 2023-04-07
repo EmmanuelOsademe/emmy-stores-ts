@@ -1,0 +1,5 @@
+name,description,price,discountRate,currentStock,triggerQuantity,Category,company,featured,freeShipping,image,numOfReviews,averageRating
+Accent Chair,Cozy and comfortable. Available in different colors. Quality you can trust,25999,2.5,75,10,home & office,marcos,TRUE,TRUE,https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160,50,4
+Albany Sectional,Cozy and comfortable. Available in different colors. Quality you can trust,125999,5,51,5,home & office,argos,TRUE,FALSE,https://dl.airtable.com/.attachmentThumbnails/0be1af59cf889899b5c9abb1e4db38a4/d631ac52,75,5
+Arm Chair,Cozy and comfortable. Available in different colors. Quality you can trust,24999,2.5,48,5,home & office,marcos,TRUE,TRUE,https://dl.airtable.com/.attachmentThumbnails/530c07c5ade5acd9934c8dd334458b86/cf91397f,45,5
+Emperor Bed,Cozy and comfortable. Available in different colors. Quality you can trust,94999,5,35,5,home & office,argos,TRUE,TRUE,https://dl.airtable.com/.attachmentThumbnails/0446e84c5bca9643de3452a61b2d6195/1b32f48b,68,5

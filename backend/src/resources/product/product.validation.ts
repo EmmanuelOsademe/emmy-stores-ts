@@ -12,12 +12,13 @@ export const singleProductSchema = object({
     image: string(),
     price: number(),
     currentStock: number().optional(),
+    triggerQuantity: number().optional(),
     color: string().array().optional(),
     company: string().optional(),
     category: string().optional(),
     inventory: string().optional(),
     featured: boolean().optional(),
-    freeShipping: boolean().optional()
+    freeShipping: boolean().optional(),
 })
 
 export const createProductSchema = object({

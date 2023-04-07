@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import { verifyAccessToken } from '@/utils/token';
+import path from 'path';
 
 export default async function deserialiseUser(req: Request, res: Response, next: NextFunction){
     

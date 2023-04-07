@@ -24,7 +24,7 @@ class ProductController implements Controller {
     private initialiseRoutes(): void {
         this.router.post(
             `${this.path}/createProduct`,
-            [isAdmin, /*uploadProducts.single('products'), convertCsvToJson, */validateResource(createProductSchema)],
+            [isAdmin, uploadProducts.single('products'), convertCsvToJson, validateResource(createProductSchema)],
             this.createProduct
         )
 
@@ -66,6 +66,7 @@ class ProductController implements Controller {
             const dbProduct = await this.ProductService.createProduct(productsInput);
             res.status(StatusCodes.CREATED).json(dbProduct);
         } catch (e: any) {
+            console.log(e);
             log.error(e.message);
             next(new HttpException(StatusCodes.BAD_REQUEST, e));
         }
@@ -78,6 +79,7 @@ class ProductController implements Controller {
             const product = await this.ProductService.updateProduct(productUpdateInput, productId);
             res.status(StatusCodes.OK).json(product);
         } catch (e: any) {
+            console.log(e);
             log.error(e.message);
             next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
         }
