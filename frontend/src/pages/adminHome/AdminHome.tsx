@@ -8,6 +8,7 @@ import {Box} from "@mui/material";
 import { LineChartTemplate } from "../../components/lineChart/LineChart.Template";
 import {SalesPurchasesI} from "../../../../backend/src/resources/admin/admin.interface";
 import { FeaturedItem } from "../../components/featuredItem/FeaturedItem";
+import { useEffectOnce } from "../../hooks/useEffectOnce";
 
 
 export const AdminHome: React.FC = () => {
@@ -16,7 +17,35 @@ export const AdminHome: React.FC = () => {
     const [sales, setSales] = useState<Order[]>([]);
     const [salesPurchases, setSalesPurchases] = useState<SalesPurchasesI[]>([]);
 
-    useEffect(() => {
+    useEffectOnce(() => {
+        const requestOptions = {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
+            }
+        }
+
+        fetch(`${baseUrl}/orders`, requestOptions)
+            .then(res => res.json())
+            .then(data => setSales(data))
+    })
+
+    useEffectOnce(() => {
+        const requestOptions = {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
+            }
+        }
+
+        fetch(`${baseUrl}/admin/sales-purchases`, requestOptions)
+            .then(res => res.json())
+            .then(data => setSalesPurchases(data))
+    })
+
+    /*useEffect(() => {
         
         const requestOptions = {
             method: "GET",
@@ -43,7 +72,7 @@ export const AdminHome: React.FC = () => {
         fetch(`${baseUrl}/admin/sales-purchases`, requestOptions)
             .then(res => res.json())
             .then(data => setSalesPurchases(data))
-    }, [])
+    }, [])*/
     
     
 

@@ -4,14 +4,14 @@ import { AdminSidebar } from "../../components/adminSidebar/AdminSidebar";
 import { ProductSales, MonthlyProductsSales } from "../../../../backend/src/resources/admin/admin.interface";
 import { Context } from "../../context/Context";
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useEffectOnce } from "../../hooks/useEffectOnce";
 
 export const AdminSales: React.FC = () => {
-    const [salesData, setSalesData] = useState<MonthlyProductsSales[]>([]);
-
     const {baseUrl} = useContext(Context);
-    
 
-    useEffect(() => {
+    const [salesData, setSalesData] = useState<MonthlyProductsSales[]>([]);
+  
+    useEffectOnce(() => {
         const requestOptions = {
             method: "GET",
             headers: {
@@ -23,7 +23,21 @@ export const AdminSales: React.FC = () => {
         fetch(`${baseUrl}/admin/monthly-sales`, requestOptions)
             .then(res => res.json())
             .then(data => setSalesData(data))
-    }, [])
+    })
+    
+    /*useEffect(() => {
+        const requestOptions = {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
+            }
+        }
+
+        fetch(`${baseUrl}/admin/monthly-sales`, requestOptions)
+            .then(res => res.json())
+            .then(data => setSalesData(data))
+    }, [])*/
 
     console.log(salesData);
 

@@ -34,7 +34,7 @@ export const Login: React.FC = () => {
         setLoading(true);
         const {email, password} = loginDetails;
         const loginInfo = {email, password};
-        console.log(loading);
+        
         try {
             const requestOptions = {
                 method: "POST",

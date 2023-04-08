@@ -11,8 +11,6 @@ const validateResource = (schema: AnyZodObject) => (req: Request, res: Response,
         });
         next();
     } catch (e: any) {
-        console.log(e.message);
-        console.log(req.body);
         res.status(StatusCodes.BAD_REQUEST).send(e);
     }
 }

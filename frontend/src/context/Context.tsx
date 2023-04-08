@@ -4,6 +4,7 @@ import { CartReducer, IReducer, initialiseCart } from "./CartReducer";
 import {User} from '../../../backend/src/resources/user/user.model';
 import { IAddress } from "../interface/address";
 import { ProductReducer, productReducerInitialState } from "./ProductReducer";
+import { useEffectOnce } from "../hooks/useEffectOnce";
 
 interface ContextProviderProps {
     children: React.ReactNode;
@@ -19,11 +20,17 @@ const useValue = () => {
     const [cartState, cartDispatch] = useReducer(CartReducer, initialiseCart());
     const [productFilterState, productFilterDispatch] = useReducer(ProductReducer, productReducerInitialState)
 
-    useEffect(() => {
+    useEffectOnce(() => {
         fetch(`${baseUrl}/products`)
             .then(res => res.json())
             .then(data => setProducts(data.products))
-    }, [])
+    })
+
+    /*useEffect(() => {
+        fetch(`${baseUrl}/products`)
+            .then(res => res.json())
+            .then(data => setProducts(data.products))
+    }, [])*/
 
     // Subtotal cost of cart Items
     const [subTotal, setSubTotal] = useState<number>(() => {

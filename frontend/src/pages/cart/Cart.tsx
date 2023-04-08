@@ -1,11 +1,10 @@
 import "./Cart.css";
-import React, {useContext, useState, useEffect} from "react";
+import React, {useContext, useEffect, Key} from "react";
 import {useNavigate} from "react-router-dom";
 import { Context } from "../../context/Context";
 import { CartItem } from "../../components/cartItem/CartItem";
 import { Product } from "../../../../backend/src/resources/product/product.model";
 import { formatCurrency } from "../../utils/formatCurrency";
-import { IAddress } from "../../interface/address";
 
 
 export const Cart: React.FC = () => {
@@ -38,7 +37,7 @@ export const Cart: React.FC = () => {
 
     
     const cartElements = cart.map(item => {
-        return <CartItem key={item.productId} cartItem={item} />
+        return <CartItem key={item.productId as unknown as Key} cartItem={item} />
     })
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
