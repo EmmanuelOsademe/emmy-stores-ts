@@ -10,7 +10,7 @@ import { Payment } from "./pages/payment/Payment";
 import { PaymentCompletion } from "./pages/payment-completion/PaymentCompletion";
 import { AdminHome } from "./pages/adminHome/AdminHome";
 import { AdminSales } from "./pages/adminSales/AdminSales";
-import { AdminProducts } from "./pages/adminPurchases/AdminProducts";
+import { AdminProducts } from "./pages/adminProducts/AdminProducts";
 
 
 const App: React.FC = () => {

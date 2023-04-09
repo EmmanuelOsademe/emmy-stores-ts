@@ -8,12 +8,15 @@ import log from '@/utils/logger';
 import {createPurchaseSchema, getDailyPurchasesSchema, getSinglePurchaseSchema} from '@/resources/purchase/purchase.validation';
 import {CreatePurchaseInterface, GetDailyPurchasesInterface, GetSinglePurchaseInterface} from '@/resources/purchase/purchase.interface';
 import PurchaseService from '@/resources/purchase/purchase.service';
+import { multerUpload } from '@/utils/imports/products-import';
+import CsvToJsonConverter from '@/middlewares/convertCsvToJson';
 
 
 class PurchaseController implements Controller {
     public path ='/purchases';
     public router = Router();
     private PurchaseService = new PurchaseService()
+    private CsvToJsonConverter = new CsvToJsonConverter();
 
     constructor(){
         this.initialiseRoutes();
@@ -21,8 +24,12 @@ class PurchaseController implements Controller {
 
     private initialiseRoutes(): void {
         this.router.post(
-            `${this.path}`,
-            [isAdmin, validateResource(createPurchaseSchema)],
+            `${this.path}/createPurchase`,
+            [isAdmin, 
+                multerUpload(`../backend/src/data/uploads/purchases`).single('purchases'), 
+                this.CsvToJsonConverter.purchasesUpload, 
+                validateResource(createPurchaseSchema)
+            ],
             this.createPurchase
         )
 
@@ -40,10 +47,11 @@ class PurchaseController implements Controller {
     }
 
     private createPurchase = async (req: Request<{}, {}, CreatePurchaseInterface['body']>, res: Response, next: NextFunction): Promise<Response | void> => {
-        const purchaseBody = req.body;
+        const products = req.body.purchases;
+        console.log(products)
 
         try {
-            const purchase = await this.PurchaseService.createPurchase(purchaseBody);
+            const purchase = await this.PurchaseService.createPurchase(products);
             res.status(StatusCodes.CREATED).json(purchase);
         } catch (e: any) {
             log.error(e.message);

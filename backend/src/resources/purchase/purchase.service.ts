@@ -1,4 +1,4 @@
-import PurchaseModel from '@/resources/purchase/purchase.model';
+import PurchaseModel, { singleProduct } from '@/resources/purchase/purchase.model';
 import {CreatePurchaseInterface, GetDailyPurchasesInterface} from '@/resources/purchase/purchase.interface';
 import {Ref} from '@typegoose/typegoose';
 import Product from '@/resources/product/product.model';
@@ -7,11 +7,15 @@ import mongoose from 'mongoose';
 class PurchaseService {
     private purchase = PurchaseModel;
 
-    public async createPurchase(purchaseBody: CreatePurchaseInterface['body']): Promise<object | Error>{
-        const {quantity, unitCost, productId} = purchaseBody;
+    public async createPurchase(products: singleProduct[]): Promise<object | Error>{
+        
         try {
-            const totalCost = quantity * unitCost;
-            const purchase = await this.purchase.create({quantity, unitCost, product: productId, totalCost});
+            let totalCost = 0;
+            for(let product of products){
+                totalCost += (product.unitCost * product.quantity)
+            }
+            
+            const purchase = await this.purchase.create({products, totalCost});
             return purchase;
         } catch (e: any) {
             throw new Error(e.message);

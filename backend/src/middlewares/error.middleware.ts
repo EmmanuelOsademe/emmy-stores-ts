@@ -10,7 +10,7 @@ export default function errorMiddleware(
     //console.log(req);
     const status = error.status || 500;
     const message = error.message || "Something went wrong";
-    //console.log(error);
+    console.log(error);
     
 
     res.status(status).json({status, message})

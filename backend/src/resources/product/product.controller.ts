@@ -10,12 +10,13 @@ import ProductService from '@/resources/product/product.service';
 import log from '@/utils/logger';
 import upload from '@/utils/imageUpload';
 import { uploadProducts } from '@/utils/imports/products-import';
-import convertCsvToJson from '@/middlewares/convertCsvToJson';
+import CsvToJsonConverter from '@/middlewares/convertCsvToJson';
 
 class ProductController implements Controller {
     public path = '/products';
     public router = Router();
     private ProductService = new ProductService();
+    private CsvToJsonConverter = new CsvToJsonConverter();
 
     constructor(){
         this.initialiseRoutes();
@@ -24,7 +25,7 @@ class ProductController implements Controller {
     private initialiseRoutes(): void {
         this.router.post(
             `${this.path}/createProduct`,
-            [isAdmin, uploadProducts.single('products'), convertCsvToJson, validateResource(createProductSchema)],
+            [isAdmin, uploadProducts.single('products'), this.CsvToJsonConverter.productsUpload, validateResource(createProductSchema)],
             this.createProduct
         )
 
