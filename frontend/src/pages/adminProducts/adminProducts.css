@@ -5,6 +5,7 @@
 
 .adminProducts-sidebar {
     width: 20%;
+    min-width: 300px;
 }
 
 .adminProducts-main {
@@ -15,12 +16,16 @@
 
 .product-forms {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
 }
 
 .createProduct-form {
     width: 45%;
+    min-width: 450px;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -62,4 +67,10 @@ input::file-selector-button {
     font-size: 20px;
     font-weight: 700;
     cursor: pointer;
+}
+
+.createProduct-form_success-message {
+    font-style: italic;
+    color: cadetblue;
+    font-weight: 600;
 }

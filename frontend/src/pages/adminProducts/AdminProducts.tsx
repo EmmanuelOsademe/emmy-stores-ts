@@ -8,6 +8,35 @@ import { formHelper } from "../../utils/formHelper";
 export const AdminProducts: React.FC = () => {
     const [productsFile, setProductsFile] = useState<File | null>(null);
     const [purchasesFile, setPurchasesFile] = useState<File | null>(null);
+    const [isProductUploaded, setIsProductUploaded] = useState<boolean>(false);
+    const [isPurchaseUploaded, setIsPurchaseUploaded] = useState<boolean>(false);
+    const [productUploadFailed, setProductUploadFailed] = useState<boolean>(false);
+    const [purchaseUploadFailed, setPurchaseUploadFailed] = useState<boolean>(false);
+
+    const productUploadSuccessTimeout = (): void => {
+        setTimeout(() => {
+            setIsPurchaseUploaded(false)
+        }, 5000);
+    }
+
+    const purchaseUploadSuccessTimeout = (): void => {
+        setTimeout(() => {
+            setIsPurchaseUploaded(false)
+        }, 5000);
+    }
+
+    const productUploadFailureTimeout = (): void => {
+        setTimeout(() => {
+            setProductUploadFailed(false)
+        }, 5000);
+    }
+
+    const purchaseUploadFailureTimeout = (): void => {
+        setTimeout(() => {
+            setPurchaseUploadFailed(false)
+        }, 5000);
+    }
+
     const navigate = useNavigate();
     const {baseUrl} = useContext(Context);
     const {alert, showAlert, hideAlert, loading, setLoading, success, setSuccess} = formHelper();
@@ -23,7 +52,6 @@ export const AdminProducts: React.FC = () => {
             setPurchasesFile(event.target.files[0]);
         }
     }
-    console.log(purchasesFile);
     
 
     const handleProductsSubmit = async (event: React.SyntheticEvent) => {
@@ -49,19 +77,18 @@ export const AdminProducts: React.FC = () => {
                 if(!response.ok){
                     showAlert("An error occurred, try again", 'danger');
                     setLoading(false);
-                    navigate('/admin-products');
                     hideAlert();
                     setProductsFile(null);
                 }else{
                     const {dbProducts} = await response.json();
                     console.log(dbProducts);
-                    navigate('/admin-products');
+                    setIsProductUploaded(true);
                     setProductsFile(null);
+                    productUploadSuccessTimeout();
                 }
             } catch (e: any) {
-                console.log(e);
                 setLoading(false);
-                navigate('/admin-products');
+                productUploadFailureTimeout();
             }
         }
     }
@@ -70,7 +97,6 @@ export const AdminProducts: React.FC = () => {
         event.preventDefault();
         hideAlert();
         setLoading(true);
-        console.log("Submitting request")
         
         const formData = new FormData();
 
@@ -87,27 +113,30 @@ export const AdminProducts: React.FC = () => {
                 }
 
                 const response = await fetch(`${baseUrl}/purchases/createPurchase`, requestOptions);
-                console.log(response)
+                
                 if(!response.ok){
                     showAlert("An error occurred, try again", 'danger');
                     setLoading(false);
-                    navigate('/admin-products');
                     hideAlert();
                     setProductsFile(null);
                 }else{
                     const result = await response.json();
-                    console.log(result);
                     setLoading(false);
-                    navigate('/admin-products');
+                    
+                    setIsPurchaseUploaded(true);
                     setPurchasesFile(null);
+                    
+                    purchaseUploadSuccessTimeout();
+                    
                 }
             } catch (e: any) {
                 console.log(e);
                 setLoading(false);
-                navigate('/admin-products');
+                purchaseUploadFailureTimeout()
             }
         }
     }
+    console.log(isPurchaseUploaded);
 
 
     return(
@@ -119,7 +148,7 @@ export const AdminProducts: React.FC = () => {
                 <div className="product-forms">
                     <form onSubmit={handlePurchasesSubmit} className="createProduct-form">
                         <div className="createProduct-form_items">
-                            <span>Upload Purchased Products: </span>
+                            <span>Select Purchases: </span>
                             <input 
                                 type="file"
                                 accept=".csv"
@@ -128,17 +157,21 @@ export const AdminProducts: React.FC = () => {
                             />
                         </div>
                         <button className="formBtn" disabled={!purchasesFile || purchasesFile === null}>{loading ? 'Loading' : 'Upload Purchases'}</button>
+                        {isPurchaseUploaded && <div className="createProduct-form_success-message">Purchased products successfully uploaded</div>}
+                        {purchaseUploadFailed && <div className="createProduct-form_failure-message">Purchases uploaded unsuccessful. Try again</div>}
                     </form>
                     <form onSubmit={handleProductsSubmit} className="createProduct-form">
                         <div className="createProduct-form_items">
-                            <span>Update Products Details: </span>
+                            <span>Select Products: </span>
                             <input 
                                 type="file"
                                 accept=".csv"
                                 onChange={handleProductsChange}
                             />
                         </div>
-                        <button className="formBtn" disabled={!productsFile || productsFile === null}>{loading ? 'Loading' : 'Update Products'}</button>
+                        <button className="formBtn" disabled={!productsFile || productsFile === null}>{loading ? 'Loading' : 'Upload Products'}</button>
+                        {isProductUploaded && <div className="createProduct-form_success-message">Products successfully uploaded</div>}
+                        {productUploadFailed && <div className="createProduct-form_failure-message">Products uploaded unsuccessful. Try again</div>}
                     </form>
                 </div>
             </div>
