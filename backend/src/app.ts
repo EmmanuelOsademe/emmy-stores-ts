@@ -8,12 +8,12 @@ import Controller from '@/utils/interfaces/controller.interface';
 import rateLimiter from '@/utils/maximumRequest';
 import errorMiddleware from '@/middlewares/error.middleware';
 import deserialiseUser from '@/middlewares/deserialiseUser.middleware';
-import AdminCronJobs from './utils/cronJobs/adminCronJobs';
+//import AdminCronJobs from './utils/cronJobs/adminCronJobs';
 
 class App {
     public express: Application;
     public port: number;
-    private AdminCronJobs = new AdminCronJobs();
+    //private AdminCronJobs = new AdminCronJobs();
 
     constructor(controllers: Controller[], port: number){
         this.express = express();

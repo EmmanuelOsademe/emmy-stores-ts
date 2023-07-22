@@ -1,6 +1,6 @@
 import nodemailer, {SendMailOptions} from 'nodemailer';
 import log from '@/utils/logger';
-import hbs from 'nodemailer-express-handlebars'
+// import hbs from 'nodemailer-express-handlebars'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -16,12 +16,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-transporter.use('compile', hbs({
-    viewEngine: {
-        partialsDir: './views/'
-    },
-    viewPath: './src/utils/views/'
-}))
+// transporter.use('compile', hbs({
+//     viewEngine: {
+//         partialsDir: './views/'
+//     },
+//     viewPath: './src/utils/views/'
+// }))
 
 export default async function sendEmail(payload: SendMailOptions){
     transporter.sendMail(payload, (err, info) => {
