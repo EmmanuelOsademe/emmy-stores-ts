@@ -4,7 +4,7 @@
 
 .products_container {
     display: flex;
-    width: 78%;
+    width: 80%;
     padding: 20px;
     flex-wrap: wrap;
     justify-content: space-around;

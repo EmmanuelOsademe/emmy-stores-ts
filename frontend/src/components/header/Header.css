@@ -113,3 +113,10 @@
     top: 0;
     transform: translate(0%, 0%);
 }
+
+@media (max-width: 400px){
+
+    .header-middle{
+        display: none;
+    }
+}

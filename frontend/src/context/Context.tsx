@@ -11,7 +11,7 @@ interface ContextProviderProps {
 }
 
 const useValue = () => {
-    const baseUrl = "http://localhost:5000/api/v1" //import.meta.env.VITE_APP_BASE_URL
+    const baseUrl = import.meta.env.VITE_BACKEND_URL;
     const [products, setProducts] = useState<Product[]>([]);
     const [user, setUser] = useState<User | undefined>(undefined);
 
