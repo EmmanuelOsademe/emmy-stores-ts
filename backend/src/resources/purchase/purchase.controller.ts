@@ -44,6 +44,8 @@ class PurchaseController implements Controller {
             [isAdmin, validateResource(getSinglePurchaseSchema)],
             this.getSinglePurchase
         )
+
+        
     }
 
     private createPurchase = async (req: Request<{}, {}, CreatePurchaseInterface['body']>, res: Response, next: NextFunction): Promise<Response | void> => {

@@ -29,9 +29,9 @@ class AdminController implements Controller {
             isAdmin,
             this.getMonthlySales
         );
-    }
 
-    
+        
+    }
 
     private getSalesPurchases = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
         try {
