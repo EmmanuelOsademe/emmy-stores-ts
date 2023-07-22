@@ -94,7 +94,7 @@ class OrderService {
                 throw new Error("User does not exist");
             }
 
-            if(!(user.role === 'admin') && !(user._id === userId)){
+            if(!(user.role === 'admin') && !(String(user._id) === userId)){
                 throw new Error('You are not authorised to access this information')
             }
 
