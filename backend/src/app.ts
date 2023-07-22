@@ -22,7 +22,7 @@ class App {
         this.initialiseDatabaseConnection();
         this.initialiseMiddlewares();
         this.initialiseControllers(controllers);
-        this.initialiseCronJobs();
+        //this.initialiseCronJobs();
         this.initialiseErrorHandler();
     }
 
@@ -54,9 +54,9 @@ class App {
         })
     }
 
-    private initialiseCronJobs(): void{
-        this.AdminCronJobs;
-    }
+    // private initialiseCronJobs(): void{
+    //     this.AdminCronJobs;
+    // }
 
     private initialiseErrorHandler(): void {
         this.express.use(errorMiddleware);
