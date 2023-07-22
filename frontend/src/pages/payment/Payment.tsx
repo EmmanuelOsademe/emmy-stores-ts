@@ -50,7 +50,7 @@ export const Payment: React.FC = () => {
             },
             body: JSON.stringify({cart, subTotal, shippingFee, tax, totalCost, deliveryOption, deliveryAddress})
         }
-        console.log(cart);
+       
 
         const api = async () => {
             try {

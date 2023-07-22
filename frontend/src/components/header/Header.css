@@ -18,11 +18,23 @@
     align-items: center;
 }
 
-.logo {
+.logo_icon {
+    display: flex;
+    align-items: center;
+    color: midnightblue;
+    font-size: 24px;
     font-weight: 600;
-    font-size: 30px;
-    color: cornflowerblue;
+    justify-content: start;
+    gap: 2px
+}
+.logo {
+    height: 26px;
+    width: 26px;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
     cursor: pointer;
+    margin-left: -2px;
 }
 
 .header-middle{

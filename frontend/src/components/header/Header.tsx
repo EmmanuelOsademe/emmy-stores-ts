@@ -24,8 +24,13 @@ export const Header: React.FC = () => {
         <div className='header'>
             <div className='header-container'>
                 <div className='header-left'>
-                    <Link to="/" className='link'>
-                        <span className='logo'>Emmy Stores</span>
+                    <Link to="/" className='link logo_icon'>
+                        <span>Shop Inn|</span>
+                        <img 
+                            src='/shopinnfav.png'
+                            alt='logo'
+                            className='logo'
+                        />
                     </Link>
                 </div>
                 <div className='header-middle'>
@@ -61,5 +66,5 @@ export const Header: React.FC = () => {
                 </div>
             </div>
         </div>
-    )
+    ) 
 }

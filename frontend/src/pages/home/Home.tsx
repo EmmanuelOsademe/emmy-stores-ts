@@ -7,7 +7,7 @@ import { Product } from "../../../../backend/src/resources/product/product.model
 
 const Home: React.FC = () => {
     const {products, productFilterState: {byRating, byShipping, byStock, sort, searchQuery}} = useContext(Context);
-    //console.log(products);
+    
     const transformProducts = () : Product[] => {
         let sortedProducts = products;
 
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
         if(byRating){
             sortedProducts = sortedProducts.filter((prod) => prod.averageRating >= byRating)
         }
-        console.log(searchQuery);
+        
         if(searchQuery) {
             sortedProducts = sortedProducts.filter((prod) => prod.name.toLowerCase().includes(searchQuery.toLowerCase()))
         }

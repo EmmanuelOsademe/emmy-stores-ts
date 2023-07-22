@@ -10,10 +10,9 @@ interface ContextProviderProps {
     children: React.ReactNode;
 }
 
-
 const useValue = () => {
+    const baseUrl = "http://localhost:5000/api/v1" //import.meta.env.VITE_APP_BASE_URL
     const [products, setProducts] = useState<Product[]>([]);
-    const [baseUrl, setBaseUrl] = useState<String>("http://localhost:5000/api/v1");
     const [user, setUser] = useState<User | undefined>(undefined);
 
     // Reducers

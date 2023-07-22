@@ -18,8 +18,7 @@ const transporter = nodemailer.createTransport({
 
 transporter.use('compile', hbs({
     viewEngine: {
-        partialsDir: './views/',
-        defaultLayout: false,
+        partialsDir: './views/'
     },
     viewPath: './src/utils/views/'
 }))
