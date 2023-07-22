@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
 import "./SingleProduct.css";
-import { Rating } from '../rating/Rating';
-import {Product} from "../../../../backend/src/resources/product/product.model";
 import { Context } from '../../context/Context';
 import {StarOutline, Star} from '@mui/icons-material';
 
 interface Props {
-    prod: Product;
+    prod: any;
 }
 
 export const SingleProduct: React.FC<Props> = ({prod}) => {

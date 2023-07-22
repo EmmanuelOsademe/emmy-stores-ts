@@ -1,5 +1,4 @@
 import {ICart} from "../interface/cart";
-import {Product} from "../../../backend/src/resources/product/product.model";
 
 export interface IReducer {
     cart: ICart[];
@@ -7,8 +6,8 @@ export interface IReducer {
 
 
 type CartReducerActions = 
-    {type: "ADD_TO_CART", payload: Product} |
-    {type: "REMOVE_FROM_CART", payload: Product} |
+    {type: "ADD_TO_CART", payload: any} |
+    {type: "REMOVE_FROM_CART", payload: any} |
     {type: "CHANGE_CART_QUANTITY", payload: ICart} |
     {type: "EMPTY_CART"}
     

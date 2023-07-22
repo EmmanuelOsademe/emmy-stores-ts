@@ -1,11 +1,11 @@
 import "./lineChart.css";
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { SalesPurchasesI } from "../../../../backend/src/resources/admin/admin.interface";
+
 
 interface Props {
     title: string;
-    data: SalesPurchasesI[];
+    data: any[];
     label: string;
     labelPosition: string;
     grid: boolean;

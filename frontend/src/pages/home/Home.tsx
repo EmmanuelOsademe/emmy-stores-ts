@@ -3,12 +3,11 @@ import { useContext } from "react";
 import { Context } from "../../context/Context";
 import { Sidebar } from "../../components/sidebar/Sidebar";
 import { SingleProduct } from "../../components/singleProduct/SingleProduct";
-import { Product } from "../../../../backend/src/resources/product/product.model";
 
 const Home: React.FC = () => {
     const {products, productFilterState: {byRating, byShipping, byStock, sort, searchQuery}} = useContext(Context);
     
-    const transformProducts = () : Product[] => {
+    const transformProducts = () : any[] => {
         let sortedProducts = products;
 
         if(sort){

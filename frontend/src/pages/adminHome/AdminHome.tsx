@@ -1,12 +1,10 @@
 import "./adminHome.css";
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../../context/Context";
-import { Order, singleOrder } from "../../../../backend/src/resources/order/order.model";
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
 import { AdminSidebar } from "../../components/adminSidebar/AdminSidebar";
 import {Box} from "@mui/material";
 import { LineChartTemplate } from "../../components/lineChart/LineChart.Template";
-import {SalesPurchasesI} from "../../../../backend/src/resources/admin/admin.interface";
 import { FeaturedItem } from "../../components/featuredItem/FeaturedItem";
 import { useEffectOnce } from "../../hooks/useEffectOnce";
 
@@ -14,8 +12,8 @@ import { useEffectOnce } from "../../hooks/useEffectOnce";
 export const AdminHome: React.FC = () => {
     const {baseUrl} = useContext(Context);
 
-    const [sales, setSales] = useState<Order[]>([]);
-    const [salesPurchases, setSalesPurchases] = useState<SalesPurchasesI[]>([]);
+    const [sales, setSales] = useState<any[]>([]);
+    const [salesPurchases, setSalesPurchases] = useState<any[]>([]);
 
     useEffectOnce(() => {
         const requestOptions = {
@@ -92,7 +90,7 @@ export const AdminHome: React.FC = () => {
             headerAlign: 'center',
             align: 'center',
             valueGetter(params: GridValueGetterParams): String {
-                return params.row.orderItems.reduce((initialString: String, currProd: singleOrder) => {
+                return params.row.orderItems.reduce((initialString: String, currProd: any) => {
                     return initialString + currProd.productName + " ";
                 }, "")
             }

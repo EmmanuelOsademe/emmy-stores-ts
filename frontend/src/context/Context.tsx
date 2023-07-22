@@ -1,7 +1,5 @@
 import {useState, useEffect, useReducer, createContext} from "react";
-import {Product} from "../../../backend/src/resources/product/product.model";
 import { CartReducer, IReducer, initialiseCart } from "./CartReducer";
-import {User} from '../../../backend/src/resources/user/user.model';
 import { IAddress } from "../interface/address";
 import { ProductReducer, productReducerInitialState } from "./ProductReducer";
 import { useEffectOnce } from "../hooks/useEffectOnce";
@@ -12,8 +10,8 @@ interface ContextProviderProps {
 
 const useValue = () => {
     const baseUrl = import.meta.env.VITE_BACKEND_URL;
-    const [products, setProducts] = useState<Product[]>([]);
-    const [user, setUser] = useState<User | undefined>(undefined);
+    const [products, setProducts] = useState<any[]>([]);
+    const [user, setUser] = useState<any>(undefined);
 
     // Reducers
     const [cartState, cartDispatch] = useReducer(CartReducer, initialiseCart());
@@ -34,7 +32,7 @@ const useValue = () => {
     // Subtotal cost of cart Items
     const [subTotal, setSubTotal] = useState<number>(() => {
         if(cartState.cart.length > 0){
-            return cartState.cart.reduce((acc, curr) => acc + ((products.find(prod => prod._id === curr.productId) as Product)?.price * curr.quantity), 0)
+            return cartState.cart.reduce((acc, curr) => acc + ((products.find(prod => prod._id === curr.productId) as any)?.price * curr.quantity), 0)
         }else{
             return 0;
         }

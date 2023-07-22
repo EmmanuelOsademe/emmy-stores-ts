@@ -1,7 +1,6 @@
 import "./adminSales.css";
 import React, { useState, useEffect, useContext } from "react";
 import { AdminSidebar } from "../../components/adminSidebar/AdminSidebar";
-import { ProductSales, MonthlyProductsSales } from "../../../../backend/src/resources/admin/admin.interface";
 import { Context } from "../../context/Context";
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useEffectOnce } from "../../hooks/useEffectOnce";
@@ -9,7 +8,7 @@ import { useEffectOnce } from "../../hooks/useEffectOnce";
 export const AdminSales: React.FC = () => {
     const {baseUrl} = useContext(Context);
 
-    const [salesData, setSalesData] = useState<MonthlyProductsSales[]>([]);
+    const [salesData, setSalesData] = useState<any[]>([]);
   
     useEffectOnce(() => {
         const requestOptions = {

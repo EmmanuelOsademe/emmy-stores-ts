@@ -5,7 +5,6 @@ import { Context } from "../../context/Context";
 import {loadStripe, Stripe} from '@stripe/stripe-js';
 import {Elements} from "@stripe/react-stripe-js";
 import { Checkout } from "../../components/checkout/Checkout";
-import {Order} from "../../../../backend/src/resources/order/order.model";
 
 export const Payment: React.FC = () => {
     const navigate = useNavigate();

@@ -3,7 +3,6 @@ import React, {useContext, useEffect, Key} from "react";
 import {useNavigate} from "react-router-dom";
 import { Context } from "../../context/Context";
 import { CartItem } from "../../components/cartItem/CartItem";
-import { Product } from "../../../../backend/src/resources/product/product.model";
 import { formatCurrency } from "../../utils/formatCurrency";
 
 
@@ -14,7 +13,7 @@ export const Cart: React.FC = () => {
     setDeliveryAddress, shippingFee, setShippingFee, tax, setTax, totalCost, setTotalCost, subTotal, setSubTotal} = useContext(Context);
     
     useEffect(() => {
-        setSubTotal(cart.reduce((acc, curr) => acc + ((products.find(prod => prod._id === curr.productId) as Product)?.price * curr.quantity), 0))
+        setSubTotal(cart.reduce((acc, curr) => acc + ((products.find(prod => prod._id === curr.productId) as any)?.price * curr.quantity), 0))
     }, [cart])
 
     useEffect(() => {
