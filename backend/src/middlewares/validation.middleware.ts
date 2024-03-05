@@ -2,7 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import {AnyZodObject} from 'zod';
 import { StatusCodes } from 'http-status-codes';
 
-const validateResource = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
+const  validateResource = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
     try {
         schema.parse({
             body: req.body,

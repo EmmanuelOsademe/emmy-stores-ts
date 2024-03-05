@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  frontend: 
+    build: ./frontend
+    ports: 
+      - 3001:3001
+  backend:
+    build: ./backend
+    ports:
+      - 3000:3000
+    environment:
+      DB_URL: mongodb+srv://EmmanuelOsademe:TnDcEO2022dec@nodeexpresscourse.noxkeo5.mongodb.net/TS-eCommerceAPI?retryWrites=true&w=majority
+  database:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - emmystores:/data/db
+
+
+volumes:
+  emmystores: 
